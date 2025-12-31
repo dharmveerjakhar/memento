@@ -2,7 +2,8 @@
 
 > Visualize your entire life as a finite grid of weeks on your Android wallpaper
 
-![Life Calendar Preview](docs/preview.png)
+<!-- TODO: Add preview image after first build -->
+<!-- ![Memento Preview](docs/preview.png) -->
 
 Inspired by [Wait But Why's Life Calendar](https://waitbutwhy.com/2014/05/life-weeks.html) and [@luismbat's iOS implementation](https://x.com/luismbat), this Android app displays your life as a grid where:
 - **Filled circles** = Weeks you've already lived
@@ -21,9 +22,13 @@ The wallpaper updates automatically every week, serving as a gentle reminder of 
 
 ## Screenshots
 
+*Screenshots will be added after the first build. Build the app and run it on a device to capture screenshots.*
+
+<!-- Uncomment when screenshots are available:
 | Onboarding | Home | Settings |
 |------------|------|----------|
 | ![Onboarding](docs/onboarding.png) | ![Home](docs/home.png) | ![Settings](docs/settings.png) |
+-->
 
 ## Installation
 
