@@ -1,4 +1,4 @@
-# Life Calendar
+# Memento
 
 > Visualize your entire life as a finite grid of weeks on your Android wallpaper
 
@@ -29,7 +29,7 @@ The wallpaper updates automatically every week, serving as a gentle reminder of 
 
 ### From Releases (Recommended)
 
-1. Download the latest APK from [Releases](https://github.com/yourusername/life-calendar/releases)
+1. Download the latest APK from [Releases](https://github.com/dharmveerjakhar/memento/releases)
 2. Install on your Android device (enable "Install from Unknown Sources" if needed)
 3. Open the app and enter your birth date
 
@@ -44,8 +44,8 @@ The wallpaper updates automatically every week, serving as a gentle reminder of 
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/life-calendar.git
-cd life-calendar
+git clone https://github.com/dharmveerjakhar/memento.git
+cd memento
 
 # Build debug APK
 ./gradlew assembleDebug

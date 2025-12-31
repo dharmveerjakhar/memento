@@ -1,14 +1,14 @@
-# Contributing to Life Calendar
+# Contributing to Memento
 
-Thank you for your interest in contributing to Life Calendar! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to Memento! This document provides guidelines and instructions for contributing.
 
 ## Getting Started
 
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/life-calendar.git
-   cd life-calendar
+   git clone https://github.com/YOUR_USERNAME/memento.git
+   cd memento
    ```
 3. **Create a branch** for your changes:
    ```bash
@@ -161,8 +161,8 @@ app/src/main/java/com/example/lifecalendar/
 
 ## Need Help?
 
-- **Questions**: Open a [Discussion](https://github.com/yourusername/life-calendar/discussions)
-- **Bugs**: File an [Issue](https://github.com/yourusername/life-calendar/issues) with steps to reproduce
+- **Questions**: Open a [Discussion](https://github.com/dharmveerjakhar/memento/discussions)
+- **Bugs**: File an [Issue](https://github.com/dharmveerjakhar/memento/issues) with steps to reproduce
 - **Feature Requests**: Open an Issue with the `enhancement` label
 
 ## License
