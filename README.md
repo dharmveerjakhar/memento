@@ -111,15 +111,6 @@ app/src/main/java/com/example/lifecalendar/
 
 Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-### Ideas for Improvement
-
-- [ ] Additional themes/color schemes
-- [ ] Widget support (home screen widget)
-- [ ] Export/share calendar image
-- [ ] Milestone markers (birthdays, significant events)
-- [ ] Different grid shapes (squares, dots, etc.)
-- [ ] Localization support
-
 ## License
 
 This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.
