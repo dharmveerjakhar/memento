@@ -70,17 +70,27 @@ private fun getIconPattern(type: DotIconType): List<String> {
             "XX....."
         )
         DotIconType.SETTINGS -> listOf(
-            "....XXX....",
-            "...XXXXX...",
-            "..XX...XX..",
-            ".XX.....XX.",
-            "X.X.....X.X",
-            "X.X..X..X.X",
-            "X.X.....X.X",
-            ".XX.....XX.",
-            "..XX...XX..",
-            "...XXXXX...",
-            "....XXX...."
+            "        XXXXX        ",
+            "        XXXXX        ",
+            "        XXXXX        ",
+            "    XXXXXXXXXXXXX    ",
+            "   XXXXXXXXXXXXXXX   ",
+            "  XXXXXX     XXXXXX  ",
+            "  XXXXX       XXXXX  ",
+            "  XXXX         XXXX  ",
+            "XXXXX           XXXXX",
+            "XXXXX           XXXXX",
+            "XXXXX           XXXXX",
+            "XXXXX           XXXXX",
+            "XXXXX           XXXXX",
+            "  XXXX         XXXX  ",
+            "  XXXXX       XXXXX  ",
+            "  XXXXXX     XXXXXX  ",
+            "   XXXXXXXXXXXXXXX   ",
+            "    XXXXXXXXXXXXX    ",
+            "        XXXXX        ",
+            "        XXXXX        ",
+            "        XXXXX        "
         )
     }
 }
