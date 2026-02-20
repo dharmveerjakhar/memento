@@ -98,8 +98,8 @@ fun HomeScreen(
                 DotIcon(
                     type = DotIconType.SETTINGS,
                     color = MaterialTheme.colorScheme.onBackground,
-                    dotSize = 2.dp,
-                    spacing = 1.dp
+                    dotSize = 1.6.dp,
+                    spacing = 0.8.dp
                 )
             }
         }
