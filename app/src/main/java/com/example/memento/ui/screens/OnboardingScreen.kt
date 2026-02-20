@@ -175,9 +175,11 @@ fun OnboardingScreen(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
             ) {
-                Text(
-                    text = "Generate My Memento",
-                    style = MaterialTheme.typography.titleMedium
+                DotText(
+                    text = "GENERATE MY MEMENTO",
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    dotSize = 3.dp,
+                    spacing = 1.dp
                 )
             }
 

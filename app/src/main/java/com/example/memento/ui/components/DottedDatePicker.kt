@@ -76,6 +76,7 @@ fun DottedDatePickerDialog(
         mutableStateOf(initialDate ?: LocalDate.now())
     }
     var showYearPicker by remember { mutableStateOf(false) }
+    var showMonthPicker by remember { mutableStateOf(false) }
 
     val dateFormatter = remember { DateTimeFormatter.ofPattern("d MMM yyyy") }
 
@@ -124,6 +125,16 @@ fun DottedDatePickerDialog(
                         },
                         onDismiss = { showYearPicker = false }
                     )
+                } else if (showMonthPicker) {
+                    // Month picker view
+                    MonthPicker(
+                        currentMonth = displayedMonth.monthValue,
+                        onMonthSelected = { month ->
+                            displayedMonth = displayedMonth.withMonth(month)
+                            showMonthPicker = false
+                        },
+                        onDismiss = { showMonthPicker = false }
+                    )
                 } else {
                     // Month navigation
                     Row(
@@ -143,19 +154,20 @@ fun DottedDatePickerDialog(
                         }
 
                         Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.clickable { showYearPicker = true }
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             DottedText(
                                 text = displayedMonth.month.getDisplayName(TextStyle.SHORT, Locale.getDefault()).uppercase(),
                                 fontSize = 18,
-                                color = Color.White
+                                color = Color(0xFF64B5F6),
+                                modifier = Modifier.clickable { showMonthPicker = true }
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             DottedText(
                                 text = displayedMonth.year.toString(),
                                 fontSize = 18,
-                                color = Color(0xFF64B5F6) // Light blue to indicate clickable
+                                color = Color(0xFF64B5F6), // Light blue to indicate clickable
+                                modifier = Modifier.clickable { showYearPicker = true }
                             )
                         }
 
@@ -223,7 +235,7 @@ fun DottedDatePickerDialog(
 }
 
 /**
- * Year picker with scrollable list of years.
+ * Year picker with scrollable list of years formatted as a grid.
  */
 @Composable
 private fun YearPicker(
@@ -238,7 +250,7 @@ private fun YearPicker(
     LaunchedEffect(Unit) {
         val index = years.indexOf(currentYear)
         if (index >= 0) {
-            listState.scrollToItem(index)
+            listState.scrollToItem(index / 3)
         }
     }
 
@@ -258,24 +270,94 @@ private fun YearPicker(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(years) { year ->
-                val isSelected = year == currentYear
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { onYearSelected(year) }
-                        .background(
-                            if (isSelected) Color.White else Color.Transparent,
-                            RoundedCornerShape(8.dp)
-                        )
-                        .padding(vertical = 14.dp),
-                    contentAlignment = Alignment.Center
+            items(years.chunked(3)) { rowYears ->
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    DottedText(
-                        text = year.toString(),
-                        fontSize = 22,
-                        color = if (isSelected) Color.Black else Color.White
-                    )
+                    rowYears.forEach { year ->
+                        val isSelected = year == currentYear
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickable { onYearSelected(year) }
+                                .background(
+                                    if (isSelected) Color.White else Color.Transparent,
+                                    RoundedCornerShape(8.dp)
+                                )
+                                .padding(vertical = 12.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            DottedText(
+                                text = year.toString(),
+                                fontSize = 20,
+                                color = if (isSelected) Color.Black else Color.White
+                            )
+                        }
+                    }
+                    repeat(3 - rowYears.size) {
+                        Box(modifier = Modifier.weight(1f))
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Month picker with grid of months.
+ */
+@Composable
+private fun MonthPicker(
+    currentMonth: Int,
+    onMonthSelected: (Int) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val months = (1..12).map { 
+        java.time.Month.of(it).getDisplayName(TextStyle.SHORT, Locale.getDefault()).uppercase() 
+    }
+    
+    Column(
+        modifier = Modifier.height(350.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        DottedText(
+            text = "SELECT MONTH",
+            fontSize = 16,
+            color = Color.Gray
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            items(months.chunked(3)) { rowMonths ->
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    rowMonths.forEach { monthName ->
+                        val monthIndex = months.indexOf(monthName) + 1
+                        val isSelected = monthIndex == currentMonth
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .clickable { onMonthSelected(monthIndex) }
+                                .background(
+                                    if (isSelected) Color.White else Color.Transparent,
+                                    RoundedCornerShape(8.dp)
+                                )
+                                .padding(vertical = 16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            DottedText(
+                                text = monthName,
+                                fontSize = 18,
+                                color = if (isSelected) Color.Black else Color.White
+                            )
+                        }
+                    }
                 }
             }
         }

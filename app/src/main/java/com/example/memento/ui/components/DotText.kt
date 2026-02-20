@@ -386,6 +386,23 @@ private fun getPattern(char: Char): List<String> {
             "....",
             "...."
         )
+        '!' -> listOf(
+            ".X.",
+            ".X.",
+            ".X.",
+            "...",
+            ".X.",
+            "..."
+        )
+        '*' -> listOf(
+            "..X.X..",
+            ".XX.XX.",
+            "XX...XX",
+            ".X...X.",
+            "XX...XX",
+            ".XX.XX.",
+            "..X.X.."
+        )
         
         else -> listOf(
             "....",

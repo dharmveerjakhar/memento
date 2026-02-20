@@ -92,10 +92,11 @@ fun HomeScreen(
             )
 
             IconButton(onClick = onSettingsClick) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "Settings",
-                    tint = MaterialTheme.colorScheme.onBackground
+                DotText(
+                    text = "*",
+                    color = MaterialTheme.colorScheme.onBackground,
+                    dotSize = 2.dp,
+                    spacing = 1.dp
                 )
             }
         }
@@ -179,15 +180,19 @@ fun HomeScreen(
             )
         ) {
             if (wallpaperSet) {
-                Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp)
+                DotText(
+                    text = "WALLPAPER SET!",
+                    color = MaterialTheme.colorScheme.background,
+                    dotSize = 2.dp,
+                    spacing = 1.dp
                 )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Wallpaper Set!")
             } else {
-                Text("Set as Wallpaper")
+                DotText(
+                    text = "SET AS WALLPAPER",
+                    color = MaterialTheme.colorScheme.background,
+                    dotSize = 2.dp,
+                    spacing = 1.dp
+                )
             }
         }
         
