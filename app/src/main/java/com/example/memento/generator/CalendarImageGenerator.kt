@@ -341,7 +341,7 @@ data class CalendarConfig(
     // Percentage-based layout (universal across screen sizes)
     val topMarginPercent: Float = 0.15f,         // Adjusted for better balance
     val bottomMarginPercent: Float = 0.15f,      // 15% from bottom (shifted down)
-    val marginPercent: Float = 0.058f,           // Exactly aligns with 24.dp in Compose Padding
+    val marginPercent: Float = 0.09f,           // Exactly aligns with 24.dp in Compose Padding
     val labelTextSizePercent: Float = 0.018f,    // 1.8% of width for label text
     // Fixed values (look consistent)
     val cellSpacing: Float = 2f,                 // Tighter spacing for grid
