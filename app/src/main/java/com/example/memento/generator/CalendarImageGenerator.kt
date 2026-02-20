@@ -66,27 +66,26 @@ class CalendarImageGenerator {
         // Calculate safe zone using percentages of screen dimensions
         val topMargin = config.height * config.topMarginPercent
         val bottomMargin = config.height * config.bottomMarginPercent
-        val sideMargin = config.width * config.sideMarginPercent
-        val labelSpace = config.width * config.labelSpacePercent
+        val margin = config.width * config.marginPercent
 
-        // Available space for the grid (accounting for labels on left)
-        val availableWidth = config.width - (sideMargin * 2) - labelSpace
+        // Exact bounds to align dynamically with 24.dp outer padded Compose layouts
+        val contentLeft = margin
+        val contentRight = config.width - margin
+
+        // Available space for the grid (spanning full width between margins)
+        val availableWidth = contentRight - contentLeft
         val availableHeight = config.height - topMargin - bottomMargin
 
-        // Calculate cell size to fit all weeks
-        val maxCellWidth = (availableWidth - (columns - 1) * config.cellSpacing) / columns
-        val maxCellHeight = (availableHeight - (rows - 1) * config.cellSpacing) / rows
-        val cellSize = minOf(maxCellWidth, maxCellHeight).coerceAtLeast(config.minCellSize)
+        // Calculate cell size exactly to fit available width
+        val exactCellWidth = (availableWidth - (columns - 1) * config.cellSpacing) / columns.toFloat()
+        val cellSize = exactCellWidth.coerceAtLeast(config.minCellSize)
 
         // Calculate actual grid dimensions
         val gridWidth = columns * cellSize + (columns - 1) * config.cellSpacing
         val gridHeight = rows * cellSize + (rows - 1) * config.cellSpacing
 
-        // CENTER the grid horizontally (equal margins on both sides)
-        // Account for the left label by shifting the center slightly right
-        val totalHorizontalSpace = config.width - gridWidth
-        val leftPadding = (totalHorizontalSpace / 2) + (labelSpace / 2)
-        val gridStartX = leftPadding
+        // Center grid horizontally perfectly aligned with UI margins
+        val gridStartX = contentLeft
 
         // Center grid vertically within safe zone
         val verticalSpace = availableHeight - gridHeight
@@ -100,8 +99,8 @@ class CalendarImageGenerator {
             cellSize = cellSize,
             columns = columns,
             rows = rows,
-            labelSpace = labelSpace,
-            sideMargin = sideMargin
+            contentLeft = contentLeft,
+            contentRight = contentRight
         )
     }
 
@@ -130,7 +129,7 @@ class CalendarImageGenerator {
         val spacing = dotSize * 0.4f
         val color = config.labelColor
 
-        val labelY = layout.gridStartY - intendedHeight - padding(config)
+        val labelY = layout.gridStartY - intendedHeight - padding(dotSize)
 
         // Top-left label: "WEEK OF THE YEAR"
         drawDotText(
@@ -149,8 +148,8 @@ class CalendarImageGenerator {
         // Left side label: "YEAR OF YOUR LIFE" (rotated 90° counter-clockwise)
         canvas.save()
 
-        // Position at left of grid, centered vertically in the reserved space
-        val leftLabelX = layout.gridStartX - layout.labelSpace * 0.5f
+        // Position at left of grid, strictly padding(dotSize) away from grid start
+        val leftLabelX = layout.gridStartX - padding(dotSize) - (intendedHeight / 2f)
         val leftLabelY = layout.gridStartY + (layout.gridHeight / 2)
 
         canvas.rotate(-90f, leftLabelX, leftLabelY)
@@ -168,7 +167,7 @@ class CalendarImageGenerator {
         canvas.restore()
     }
     
-    private fun padding(config: CalendarConfig): Float = config.width * 0.01f
+    private fun padding(dotSize: Float): Float = dotSize * 3.5f
 
     /**
      * Draws the complete grid of week circles.
@@ -307,8 +306,8 @@ private data class Layout(
     val cellSize: Float,
     val columns: Int,
     val rows: Int,
-    val labelSpace: Float,
-    val sideMargin: Float
+    val contentLeft: Float,
+    val contentRight: Float
 )
 
 /**
@@ -340,10 +339,9 @@ data class CalendarConfig(
     val emptyColor: Int = 0xFF999999.toInt(),           // Lighter gray for better visibility
     val labelColor: Int = 0xFF888888.toInt(),           // Labels slightly dimmer
     // Percentage-based layout (universal across screen sizes)
-    val topMarginPercent: Float = 0.25f,         // 25% from top to clear Lock Screen Clock
+    val topMarginPercent: Float = 0.15f,         // Adjusted for better balance
     val bottomMarginPercent: Float = 0.15f,      // 15% from bottom (shifted down)
-    val sideMarginPercent: Float = 0.10f,        // 10% side margins (increased to prevent clip)
-    val labelSpacePercent: Float = 0.07f,        // 7% for left label
+    val marginPercent: Float = 0.058f,           // Exactly aligns with 24.dp in Compose Padding
     val labelTextSizePercent: Float = 0.018f,    // 1.8% of width for label text
     // Fixed values (look consistent)
     val cellSpacing: Float = 2f,                 // Tighter spacing for grid

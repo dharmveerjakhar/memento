@@ -36,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
@@ -110,8 +111,7 @@ fun HomeScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
-                .padding(horizontal = 24.dp), // Align with Stats Card
+                .weight(1f),
             contentAlignment = Alignment.Center
         ) {
             Card(
@@ -120,11 +120,11 @@ fun HomeScreen(
                     .clip(RoundedCornerShape(16.dp)),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = Color.Black // Blend with the actual wallpaper background
                 )
             ) {
                 Box(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize().background(Color.Black),
                     contentAlignment = Alignment.Center
                 ) {
                     when {
@@ -138,7 +138,7 @@ fun HomeScreen(
                                 bitmap = previewBitmap.asImageBitmap(),
                                 contentDescription = "Memento Preview",
                                 modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop // Crop to fill width (Zoom effect)
+                                contentScale = ContentScale.FillWidth // Fill exact width, relying on new margin calculations
                             )
                         }
                         else -> {
