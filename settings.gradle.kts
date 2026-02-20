@@ -20,5 +20,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "LifeCalendar"
+rootProject.name = "Memento"
 include(":app")

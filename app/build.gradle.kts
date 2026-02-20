@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.lifecalendar"
+    namespace = "com.example.memento"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.lifecalendar"
+        applicationId = "com.example.memento"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
