@@ -37,7 +37,9 @@ import com.example.memento.data.UserPreferences
 import com.example.memento.domain.LifeCalendarCalculator
 import com.example.memento.wallpaper.WallpaperTarget
 import com.example.memento.ui.components.DotText
+import com.example.memento.ui.components.DotStyleIcon
 import com.example.memento.ui.components.DottedDatePickerDialog
+import com.example.memento.data.DotStyle
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -175,12 +177,18 @@ fun SettingsScreen(
                     ) {
                         CalendarTheme.entries.forEach { theme ->
                             SegmentedControlButton(
-                                text = theme.name,
                                 selected = preferences.theme == theme,
                                 onClick = { onThemeChange(theme) },
                                 modifier = Modifier.weight(1f),
                                 onBg = onBg
-                            )
+                            ) { textColor ->
+                                DotText(
+                                    text = theme.name,
+                                    color = textColor,
+                                    dotSize = 1.5.dp,
+                                    spacing = 1.dp
+                                )
+                            }
                         }
                     }
                 }
@@ -197,14 +205,20 @@ fun SettingsScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        com.example.memento.data.DotStyle.entries.forEach { style ->
+                        DotStyle.entries.forEach { style ->
                             SegmentedControlButton(
-                                text = style.name.replace("_", " "),
                                 selected = preferences.dotStyle == style,
                                 onClick = { onDotStyleChange(style) },
                                 modifier = Modifier.weight(1f),
                                 onBg = onBg
-                            )
+                            ) { textColor ->
+                                DotStyleIcon(
+                                    style = style,
+                                    color = textColor,
+                                    dotSize = 2.dp,
+                                    spacing = 1.dp
+                                )
+                            }
                         }
                     }
                 }
@@ -280,11 +294,11 @@ private fun RoundIconButton(
 
 @Composable
 private fun SegmentedControlButton(
-    text: String,
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    onBg: Color
+    onBg: Color,
+    content: @Composable (Color) -> Unit
 ) {
     val bgColor = if (selected) onBg else Color.Transparent
     val textColor = if (selected) androidx.compose.material3.MaterialTheme.colorScheme.background else onBg.copy(alpha = 0.7f)
@@ -297,12 +311,7 @@ private fun SegmentedControlButton(
         color = bgColor
     ) {
         Box(contentAlignment = Alignment.Center) {
-            DotText(
-                text = text,
-                color = textColor,
-                dotSize = 1.5.dp,
-                spacing = 1.dp
-            )
+            content(textColor)
         }
     }
 }
