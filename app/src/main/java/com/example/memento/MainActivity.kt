@@ -146,7 +146,8 @@ fun MementoApp(
                             onBirthDateChange = { viewModel.updateBirthDate(it) },
                             onLifeExpectancyChange = { viewModel.updateLifeExpectancy(it) },
                             onWallpaperTargetChange = { viewModel.updateWallpaperTarget(it) },
-                            onThemeChange = { viewModel.updateTheme(it) }
+                            onThemeChange = { viewModel.updateTheme(it) },
+                            onDotStyleChange = { viewModel.updateDotStyle(it) }
                         )
                     }
                 }

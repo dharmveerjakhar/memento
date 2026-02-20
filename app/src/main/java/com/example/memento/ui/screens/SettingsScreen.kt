@@ -49,7 +49,8 @@ fun SettingsScreen(
     onBirthDateChange: (LocalDate) -> Unit,
     onLifeExpectancyChange: (Int) -> Unit,
     onWallpaperTargetChange: (WallpaperTarget) -> Unit,
-    onThemeChange: (CalendarTheme) -> Unit
+    onThemeChange: (CalendarTheme) -> Unit,
+    onDotStyleChange: (com.example.memento.data.DotStyle) -> Unit
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
     var lifeExpectancy by remember(preferences.lifeExpectancy) {
@@ -185,6 +186,30 @@ fun SettingsScreen(
                 }
             }
 
+            // Dot Style Section
+            SettingsSection(title = "DOT STYLE", onBg) {
+                SettingsCard {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 80.dp)
+                            .padding(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        com.example.memento.data.DotStyle.entries.forEach { style ->
+                            SegmentedControlButton(
+                                text = style.name.replace("_", " "),
+                                selected = preferences.dotStyle == style,
+                                onClick = { onDotStyleChange(style) },
+                                modifier = Modifier.weight(1f),
+                                onBg = onBg
+                            )
+                        }
+                    }
+                }
+            }
+
             Spacer(modifier = Modifier.height(64.dp))
         }
     }
@@ -275,7 +300,7 @@ private fun SegmentedControlButton(
             DotText(
                 text = text,
                 color = textColor,
-                dotSize = 2.dp,
+                dotSize = 1.5.dp,
                 spacing = 1.dp
             )
         }

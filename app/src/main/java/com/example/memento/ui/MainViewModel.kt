@@ -103,7 +103,8 @@ class MainViewModel(
                 birthDate = birthDate,
                 lifeExpectancy = lifeExpectancy,
                 wallpaperTarget = WallpaperTarget.LOCK, // Default to Lock Screen
-                theme = CalendarTheme.DARK
+                theme = CalendarTheme.DARK,
+                dotStyle = com.example.memento.data.DotStyle.FILLED_CIRCLE
             )
             scheduleWorker()
         }
@@ -157,6 +158,18 @@ class MainViewModel(
     }
 
     /**
+     * Updates the dot style setting.
+     *
+     * @param style New dot style (Circle, Ring, etc.)
+     */
+    fun updateDotStyle(style: com.example.memento.data.DotStyle) {
+        viewModelScope.launch {
+            preferencesRepository.saveDotStyle(style)
+            wallpaperSet = false
+        }
+    }
+
+    /**
      * Generates the calendar preview bitmap.
      *
      * @param prefs User preferences for generation
@@ -169,7 +182,7 @@ class MainViewModel(
                 val metrics = calculator.calculateMetrics(birthDate, prefs.lifeExpectancy)
                 _metrics.value = metrics
 
-                val config = createConfig(prefs.theme)
+                val config = createConfig(prefs.theme, prefs.dotStyle)
                 previewBitmap?.recycle()
                 previewBitmap = generator.generate(metrics, config)
             } finally {
@@ -203,26 +216,29 @@ class MainViewModel(
     }
 
     /**
-     * Creates a calendar configuration based on theme and screen dimensions.
+     * Creates a calendar configuration based on theme, dot style and screen dimensions.
      *
      * @param theme The calendar theme
+     * @param dotStyle The dot aesthetic preference
      * @return Configured CalendarConfig
      */
-    private fun createConfig(theme: CalendarTheme): CalendarConfig {
+    private fun createConfig(theme: CalendarTheme, dotStyle: com.example.memento.data.DotStyle): CalendarConfig {
         return when (theme) {
             CalendarTheme.DARK -> CalendarConfig(
                 width = screenWidth,
                 height = screenHeight,
                 backgroundColor = 0xFF000000.toInt(),
                 filledColor = 0xFFFFFFFF.toInt(),
-                emptyColor = 0xFF4A4A4A.toInt()
+                emptyColor = 0xFF4A4A4A.toInt(),
+                dotStyle = dotStyle
             )
             CalendarTheme.LIGHT -> CalendarConfig(
                 width = screenWidth,
                 height = screenHeight,
                 backgroundColor = 0xFFFFFFFF.toInt(),
                 filledColor = 0xFF000000.toInt(),
-                emptyColor = 0xFFCCCCCC.toInt()
+                emptyColor = 0xFFCCCCCC.toInt(),
+                dotStyle = dotStyle
             )
         }
     }

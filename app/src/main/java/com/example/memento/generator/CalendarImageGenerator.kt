@@ -3,7 +3,9 @@ package com.example.memento.generator
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.Typeface
+import com.example.memento.data.DotStyle
 import com.example.memento.domain.CalendarMetrics
 import com.example.memento.domain.LifeCalendarCalculator
 
@@ -186,21 +188,55 @@ class CalendarImageGenerator {
 
         val emptyPaint = Paint().apply {
             color = config.emptyColor
-            style = Paint.Style.STROKE
+            style = if (config.dotStyle == DotStyle.RING) Paint.Style.STROKE else Paint.Style.STROKE
+            // Actually, for consistency, RING should probably be a thinner stroke even for filled?
+            // Let's refine the logic below.
             strokeWidth = config.emptyCircleStrokeWidth
             isAntiAlias = true
         }
 
+        val paint = Paint().apply { isAntiAlias = true }
         var weekIndex = 0
 
         for (row in 0 until layout.rows) {
             for (col in 0 until layout.columns) {
                 val centerX = layout.gridStartX + col * (layout.cellSize + config.cellSpacing) + layout.cellSize / 2f
                 val centerY = layout.gridStartY + row * (layout.cellSize + config.cellSpacing) + layout.cellSize / 2f
-                val radius = (layout.cellSize / 2f) * 0.85f  // 85% of cell for nice spacing
-
-                val paint = if (weekIndex < metrics.weeksLived) filledPaint else emptyPaint
-                canvas.drawCircle(centerX, centerY, radius, paint)
+                val radius = (layout.cellSize / 2f) * 0.85f
+                val isFilled = weekIndex < metrics.weeksLived
+                
+                paint.color = if (isFilled) config.filledColor else config.emptyColor
+                
+                when (config.dotStyle) {
+                    DotStyle.FILLED_CIRCLE -> {
+                        paint.style = if (isFilled) Paint.Style.FILL else Paint.Style.STROKE
+                        paint.strokeWidth = config.emptyCircleStrokeWidth
+                        canvas.drawCircle(centerX, centerY, radius, paint)
+                    }
+                    DotStyle.RING -> {
+                        paint.style = Paint.Style.STROKE
+                        paint.strokeWidth = if (isFilled) config.emptyCircleStrokeWidth * 2f else config.emptyCircleStrokeWidth
+                        canvas.drawCircle(centerX, centerY, radius, paint)
+                    }
+                    DotStyle.SQUARE -> {
+                        paint.style = if (isFilled) Paint.Style.FILL else Paint.Style.STROKE
+                        paint.strokeWidth = config.emptyCircleStrokeWidth
+                        val halfSize = radius * 0.9f
+                        canvas.drawRect(centerX - halfSize, centerY - halfSize, centerX + halfSize, centerY + halfSize, paint)
+                    }
+                    DotStyle.DIAMOND -> {
+                        paint.style = if (isFilled) Paint.Style.FILL else Paint.Style.STROKE
+                        paint.strokeWidth = config.emptyCircleStrokeWidth
+                        val path = Path().apply {
+                            moveTo(centerX, centerY - radius) // Top
+                            lineTo(centerX + radius, centerY) // Right
+                            lineTo(centerX, centerY + radius) // Bottom
+                            lineTo(centerX - radius, centerY) // Left
+                            close()
+                        }
+                        canvas.drawPath(path, paint)
+                    }
+                }
 
                 weekIndex++
             }
@@ -346,5 +382,6 @@ data class CalendarConfig(
     // Fixed values (look consistent)
     val cellSpacing: Float = 2f,                 // Tighter spacing for grid
     val minCellSize: Float = 5f,                 // Minimum cell size
-    val emptyCircleStrokeWidth: Float = 1.5f     // Thicker stroke for visibility
+    val emptyCircleStrokeWidth: Float = 1.5f,    // Thicker stroke for visibility
+    val dotStyle: DotStyle = DotStyle.FILLED_CIRCLE
 )

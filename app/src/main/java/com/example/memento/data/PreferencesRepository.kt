@@ -61,6 +61,7 @@ class PreferencesRepository(private val context: Context) {
         val LIFE_EXPECTANCY = intPreferencesKey("life_expectancy")
         val WALLPAPER_TARGET = stringPreferencesKey("wallpaper_target")
         val THEME = stringPreferencesKey("theme")
+        val DOT_STYLE = stringPreferencesKey("dot_style")
         val IS_SETUP_COMPLETE = stringPreferencesKey("is_setup_complete")
     }
 
@@ -87,6 +88,9 @@ class PreferencesRepository(private val context: Context) {
                 theme = preferences[PreferencesKeys.THEME]
                     ?.let { CalendarTheme.valueOf(it) }
                     ?: CalendarTheme.DARK,
+                dotStyle = preferences[PreferencesKeys.DOT_STYLE]
+                    ?.let { DotStyle.valueOf(it) }
+                    ?: DotStyle.FILLED_CIRCLE,
                 isSetupComplete = preferences[PreferencesKeys.IS_SETUP_COMPLETE] == "true"
             )
         }
@@ -140,6 +144,17 @@ class PreferencesRepository(private val context: Context) {
     }
 
     /**
+     * Saves the dot style preference.
+     *
+     * @param style The dot aesthetic (Circle, Ring, Square, etc.)
+     */
+    suspend fun saveDotStyle(style: DotStyle) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.DOT_STYLE] = style.name
+        }
+    }
+
+    /**
      * Marks the initial setup as complete.
      *
      * Called after the user completes onboarding. Used to determine
@@ -166,13 +181,15 @@ class PreferencesRepository(private val context: Context) {
         birthDate: LocalDate,
         lifeExpectancy: Int,
         wallpaperTarget: WallpaperTarget,
-        theme: CalendarTheme
+        theme: CalendarTheme,
+        dotStyle: DotStyle
     ) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.BIRTH_DATE_EPOCH_DAYS] = birthDate.toEpochDay()
             preferences[PreferencesKeys.LIFE_EXPECTANCY] = lifeExpectancy
             preferences[PreferencesKeys.WALLPAPER_TARGET] = wallpaperTarget.name
             preferences[PreferencesKeys.THEME] = theme.name
+            preferences[PreferencesKeys.DOT_STYLE] = dotStyle.name
             preferences[PreferencesKeys.IS_SETUP_COMPLETE] = "true"
         }
     }
@@ -194,8 +211,19 @@ data class UserPreferences(
     val lifeExpectancy: Int,
     val wallpaperTarget: WallpaperTarget,
     val theme: CalendarTheme,
+    val dotStyle: DotStyle,
     val isSetupComplete: Boolean
 )
+
+/**
+ * Aesthetic styles for the dots in the calendar grid.
+ */
+enum class DotStyle {
+    FILLED_CIRCLE,
+    RING,
+    SQUARE,
+    DIAMOND
+}
 
 /**
  * Visual theme options for the calendar.
