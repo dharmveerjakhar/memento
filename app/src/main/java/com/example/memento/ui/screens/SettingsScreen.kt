@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -64,87 +67,113 @@ fun SettingsScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 16.dp),
+                .padding(horizontal = 24.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = onBack) {
+            IconButton(onClick = onBack, modifier = Modifier.padding(end = 16.dp)) {
                 DotText(text = "<", color = onBg, dotSize = 2.dp, spacing = 1.dp)
             }
-            Spacer(modifier = Modifier.width(16.dp))
             DotText(text = "SETTINGS", color = onBg, dotSize = 4.dp, spacing = 1.dp)
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Column(modifier = Modifier.padding(horizontal = 24.dp)) {
+        Column(
+            modifier = Modifier.padding(horizontal = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp)
+        ) {
             // Birth Date Section
             SettingsSection(title = "BIRTH DATE", onBg) {
                 val dateText = preferences.birthDate?.format(dateFormatter)?.uppercase() ?: "NOT SET"
-                Row(
-                    modifier = Modifier.clickable { showDatePicker = true }.padding(vertical = 12.dp)
-                ) {
-                    DotText(text = "[ $dateText ]", color = Color(0xFF64B5F6), dotSize = 2.dp, spacing = 1.dp)
+                SettingsCard {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { showDatePicker = true }
+                            .padding(20.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        DotText(text = dateText, color = onBg, dotSize = 2.dp, spacing = 1.dp)
+                        val actionColor = Color(0xFF64B5F6)
+                        DotText(text = "EDIT", color = actionColor, dotSize = 1.5.dp, spacing = 1.dp)
+                    }
                 }
             }
-
-            Spacer(modifier = Modifier.height(32.dp))
 
             // Life Expectancy Section
             SettingsSection(title = "LIFE EXPECTANCY", onBg) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    DotText(text = "YEARS", color = onBg, dotSize = 2.dp, spacing = 1.dp)
-                    
-                    Spacer(modifier = Modifier.weight(1f))
-                    
-                    IconButton(onClick = { 
-                        if (lifeExpectancy > LifeCalendarCalculator.MIN_LIFE_EXPECTANCY) {
-                            lifeExpectancy--
-                            onLifeExpectancyChange(lifeExpectancy)
-                        } 
-                    }) {
-                        DotText(text = "-", color = onBg, dotSize = 2.dp, spacing = 1.dp)
-                    }
-                    
-                    Spacer(modifier = Modifier.width(16.dp))
-                    
-                    DotText(text = lifeExpectancy.toString(), color = onBg, dotSize = 3.dp, spacing = 1.dp)
-                    
-                    Spacer(modifier = Modifier.width(16.dp))
+                SettingsCard {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp, horizontal = 20.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        DotText(text = "YEARS", color = onBg.copy(alpha = 0.7f), dotSize = 2.dp, spacing = 1.dp)
 
-                    IconButton(onClick = { 
-                        if (lifeExpectancy < LifeCalendarCalculator.MAX_LIFE_EXPECTANCY) {
-                            lifeExpectancy++
-                            onLifeExpectancyChange(lifeExpectancy)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            RoundIconButton(
+                                text = "-",
+                                onClick = { 
+                                    if (lifeExpectancy > LifeCalendarCalculator.MIN_LIFE_EXPECTANCY) {
+                                        lifeExpectancy--
+                                        onLifeExpectancyChange(lifeExpectancy)
+                                    } 
+                                },
+                                color = onBg
+                            )
+                            
+                            Spacer(modifier = Modifier.width(24.dp))
+                            
+                            DotText(
+                                text = lifeExpectancy.toString(),
+                                color = onBg,
+                                dotSize = 4.dp,
+                                spacing = 1.dp
+                            )
+                            
+                            Spacer(modifier = Modifier.width(24.dp))
+
+                            RoundIconButton(
+                                text = "+",
+                                onClick = { 
+                                    if (lifeExpectancy < LifeCalendarCalculator.MAX_LIFE_EXPECTANCY) {
+                                        lifeExpectancy++
+                                        onLifeExpectancyChange(lifeExpectancy)
+                                    }
+                                },
+                                color = onBg
+                            )
                         }
-                    }) {
-                        DotText(text = "+", color = onBg, dotSize = 2.dp, spacing = 1.dp)
                     }
                 }
             }
-
-            Spacer(modifier = Modifier.height(32.dp))
 
             // Theme Section
             SettingsSection(title = "THEME", onBg) {
-                Column {
-                    CalendarTheme.entries.forEach { theme ->
-                        RadioOption(
-                            text = when (theme) {
-                                CalendarTheme.DARK -> "DARK"
-                                CalendarTheme.LIGHT -> "LIGHT"
-                            },
-                            selected = preferences.theme == theme,
-                            onClick = { onThemeChange(theme) },
-                            color = onBg
-                        )
+                SettingsCard {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        CalendarTheme.entries.forEach { theme ->
+                            SegmentedControlButton(
+                                text = theme.name,
+                                selected = preferences.theme == theme,
+                                onClick = { onThemeChange(theme) },
+                                modifier = Modifier.weight(1f),
+                                onBg = onBg
+                            )
+                        }
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(64.dp))
         }
     }
 
@@ -166,45 +195,77 @@ private fun SettingsSection(
     onBg: Color,
     content: @Composable () -> Unit
 ) {
-    Column {
+    Column(modifier = Modifier.fillMaxWidth()) {
         DotText(
             text = title,
-            color = onBg,
-            dotSize = 3.dp,
+            color = onBg.copy(alpha = 0.5f),
+            dotSize = 2.dp,
             spacing = 1.dp,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(start = 8.dp, bottom = 12.dp)
         )
         content()
     }
 }
 
 @Composable
-private fun RadioOption(
+private fun SettingsCard(
+    content: @Composable () -> Unit
+) {
+    androidx.compose.material3.Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        color = androidx.compose.material3.MaterialTheme.colorScheme.surface,
+        tonalElevation = 2.dp
+    ) {
+        content()
+    }
+}
+
+@Composable
+private fun RoundIconButton(
     text: String,
-    selected: Boolean,
     onClick: () -> Unit,
     color: Color
 ) {
-    Row(
+    androidx.compose.material3.Surface(
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .height(48.dp)
+            .width(48.dp)
+            .clickable { onClick() },
+        shape = CircleShape,
+        color = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant,
     ) {
-        val iconText = if (selected) "[X]" else "[ ]"
-        DotText(
-            text = iconText,
-            color = color,
-            dotSize = 2.dp,
-            spacing = 1.dp
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        DotText(
-            text = text,
-            color = color,
-            dotSize = 2.dp,
-            spacing = 1.dp
-        )
+        Box(contentAlignment = Alignment.Center) {
+            DotText(text = text, color = color, dotSize = 2.5.dp, spacing = 1.dp)
+        }
+    }
+}
+
+@Composable
+private fun SegmentedControlButton(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    onBg: Color
+) {
+    val bgColor = if (selected) onBg else Color.Transparent
+    val textColor = if (selected) androidx.compose.material3.MaterialTheme.colorScheme.background else onBg.copy(alpha = 0.7f)
+    
+    androidx.compose.material3.Surface(
+        modifier = modifier
+            .height(56.dp)
+            .clickable { onClick() },
+        shape = RoundedCornerShape(12.dp),
+        color = bgColor
+    ) {
+        Box(contentAlignment = Alignment.Center) {
+            DotText(
+                text = text,
+                color = textColor,
+                dotSize = 2.dp,
+                spacing = 1.dp
+            )
+        }
     }
 }

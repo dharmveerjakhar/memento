@@ -50,14 +50,12 @@ class MainActivity : ComponentActivity() {
         val screenHeight = metrics.heightPixels
 
         setContent {
-            MementoTheme {
-                MementoApp(
-                    preferencesRepository = preferencesRepository,
-                    wallpaperUpdater = wallpaperUpdater,
-                    screenWidth = screenWidth,
-                    screenHeight = screenHeight
-                )
-            }
+            MementoApp(
+                preferencesRepository = preferencesRepository,
+                wallpaperUpdater = wallpaperUpdater,
+                screenWidth = screenWidth,
+                screenHeight = screenHeight
+            )
         }
     }
 }
@@ -110,43 +108,47 @@ fun MementoApp(
 
     // Wait for preferences to load before showing UI
     if (preferences != null) {
-        NavHost(
-            navController = navController,
-            startDestination = startDestination
-        ) {
-            composable(Screen.Onboarding.route) {
-                OnboardingScreen(
-                    onComplete = { birthDate, lifeExpectancy ->
-                        viewModel.completeOnboarding(birthDate, lifeExpectancy)
-                        navController.navigate(Screen.Home.route) {
-                            popUpTo(Screen.Onboarding.route) { inclusive = true }
+        val isDark = preferences?.theme != com.example.memento.data.CalendarTheme.LIGHT
+
+        MementoTheme(darkTheme = isDark) {
+            NavHost(
+                navController = navController,
+                startDestination = startDestination
+            ) {
+                composable(Screen.Onboarding.route) {
+                    OnboardingScreen(
+                        onComplete = { birthDate, lifeExpectancy ->
+                            viewModel.completeOnboarding(birthDate, lifeExpectancy)
+                            navController.navigate(Screen.Home.route) {
+                                popUpTo(Screen.Onboarding.route) { inclusive = true }
+                            }
                         }
-                    }
-                )
-            }
-
-            composable(Screen.Home.route) {
-                HomeScreen(
-                    metrics = metrics,
-                    previewBitmap = viewModel.previewBitmap,
-                    isLoading = viewModel.isLoading,
-                    wallpaperSet = viewModel.wallpaperSet,
-                    onSetWallpaper = { viewModel.setWallpaper() },
-                    onRefresh = { viewModel.refresh() },
-                    onSettingsClick = { navController.navigate(Screen.Settings.route) }
-                )
-            }
-
-            composable(Screen.Settings.route) {
-                preferences?.let { prefs ->
-                    SettingsScreen(
-                        preferences = prefs,
-                        onBack = { navController.popBackStack() },
-                        onBirthDateChange = { viewModel.updateBirthDate(it) },
-                        onLifeExpectancyChange = { viewModel.updateLifeExpectancy(it) },
-                        onWallpaperTargetChange = { viewModel.updateWallpaperTarget(it) },
-                        onThemeChange = { viewModel.updateTheme(it) }
                     )
+                }
+
+                composable(Screen.Home.route) {
+                    HomeScreen(
+                        metrics = metrics,
+                        previewBitmap = viewModel.previewBitmap,
+                        isLoading = viewModel.isLoading,
+                        wallpaperSet = viewModel.wallpaperSet,
+                        onSetWallpaper = { viewModel.setWallpaper() },
+                        onRefresh = { viewModel.refresh() },
+                        onSettingsClick = { navController.navigate(Screen.Settings.route) }
+                    )
+                }
+
+                composable(Screen.Settings.route) {
+                    preferences?.let { prefs ->
+                        SettingsScreen(
+                            preferences = prefs,
+                            onBack = { navController.popBackStack() },
+                            onBirthDateChange = { viewModel.updateBirthDate(it) },
+                            onLifeExpectancyChange = { viewModel.updateLifeExpectancy(it) },
+                            onWallpaperTargetChange = { viewModel.updateWallpaperTarget(it) },
+                            onThemeChange = { viewModel.updateTheme(it) }
+                        )
+                    }
                 }
             }
         }

@@ -17,6 +17,7 @@ private val DarkColorScheme = darkColorScheme(
     tertiary = Pink80,
     background = DarkBackground,
     surface = CardBackground,
+    surfaceVariant = DarkSurfaceVariant,
     onPrimary = TextPrimary,
     onSecondary = TextPrimary,
     onBackground = TextPrimary,
@@ -24,15 +25,16 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
+    primary = AccentBlue,
     secondary = PurpleGrey40,
     tertiary = Pink40,
     background = LightBackground,
-    surface = LightBackground,
-    onPrimary = TextPrimary,
-    onSecondary = TextPrimary,
-    onBackground = DarkBackground,
-    onSurface = DarkBackground
+    surface = LightCardBackground,
+    surfaceVariant = LightSurfaceVariant,
+    onPrimary = LightTextPrimary,
+    onSecondary = LightTextPrimary,
+    onBackground = LightTextPrimary,
+    onSurface = LightTextPrimary
 )
 
 /**
