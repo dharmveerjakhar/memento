@@ -43,6 +43,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.memento.domain.CalendarMetrics
 import com.example.memento.ui.components.DotText
+import com.example.memento.ui.components.DotIcon
+import com.example.memento.ui.components.DotIconType
 
 /**
  * Home screen showing the calendar preview and main actions.
@@ -93,8 +95,8 @@ fun HomeScreen(
             )
 
             IconButton(onClick = onSettingsClick) {
-                DotText(
-                    text = "*",
+                DotIcon(
+                    type = DotIconType.SETTINGS,
                     color = MaterialTheme.colorScheme.onBackground,
                     dotSize = 2.dp,
                     spacing = 1.dp

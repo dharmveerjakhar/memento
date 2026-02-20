@@ -14,7 +14,8 @@ import androidx.compose.ui.unit.dp
  * Types of custom icons supported by the DotIcon component.
  */
 enum class DotIconType {
-    EDIT
+    EDIT,
+    SETTINGS
 }
 
 /**
@@ -67,6 +68,15 @@ private fun getIconPattern(type: DotIconType): List<String> {
             "X..X...",
             "XXX....",
             "XX....."
+        )
+        DotIconType.SETTINGS -> listOf(
+            "..XXX..",
+            ".X...X.",
+            "X.X.X.X",
+            "X..X..X",
+            "X.X.X.X",
+            ".X...X.",
+            "..XXX.."
         )
     }
 }
