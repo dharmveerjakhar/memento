@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -17,11 +18,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
+import com.example.memento.ui.components.DotIcon
+import com.example.memento.ui.components.DotIconType
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -93,18 +93,18 @@ fun SettingsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .heightIn(min = 80.dp)
                             .clickable { showDatePicker = true }
-                            .padding(20.dp),
+                            .padding(horizontal = 20.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         DotText(text = dateText, color = onBg, dotSize = 2.dp, spacing = 1.dp)
-                        val actionColor = Color(0xFF64B5F6)
-                        Icon(
-                            imageVector = Icons.Default.Edit,
-                            contentDescription = "Edit Birth Date",
-                            tint = actionColor,
-                            modifier = Modifier.size(20.dp)
+                        DotIcon(
+                            type = DotIconType.EDIT,
+                            color = onBg.copy(alpha = 0.7f),
+                            dotSize = 2.dp,
+                            spacing = 1.dp
                         )
                     }
                 }
@@ -116,7 +116,8 @@ fun SettingsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 16.dp, horizontal = 20.dp),
+                            .heightIn(min = 80.dp)
+                            .padding(horizontal = 20.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
@@ -166,8 +167,10 @@ fun SettingsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .heightIn(min = 80.dp)
                             .padding(12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         CalendarTheme.entries.forEach { theme ->
                             SegmentedControlButton(
