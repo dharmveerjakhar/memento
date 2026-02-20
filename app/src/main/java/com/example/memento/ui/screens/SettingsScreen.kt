@@ -74,10 +74,14 @@ fun SettingsScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 16.dp),
+                .padding(start = 24.dp, end = 24.dp, top = 16.dp, bottom = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = onBack, modifier = Modifier.padding(end = 16.dp)) {
+            Box(
+                modifier = Modifier
+                    .clickable(onClick = onBack)
+                    .padding(end = 24.dp, top = 8.dp, bottom = 8.dp)
+            ) {
                 DotText(text = "<", color = onBg, dotSize = 2.dp, spacing = 1.dp)
             }
             DotText(text = "SETTINGS", color = onBg, dotSize = 4.dp, spacing = 1.dp)
