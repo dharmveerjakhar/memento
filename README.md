@@ -1,42 +1,41 @@
-# Memento
+<h1 align="center">Memento</h1>
 
-> Visualize your entire life as a finite grid of weeks on your Android wallpaper
+<p align="center">
+  <i>Minimalist Android wallpapers for mindful living. Visualize your life progress right on your home screen.</i>
+</p>
 
-<!-- TODO: Add preview image after first build -->
-<!-- ![Memento Preview](docs/preview.png) -->
+<p align="center">
+  <img src="docs/home_mockup.png" width="45%" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="docs/settings_mockup.png" width="45%" />
+</p>
 
-Inspired by [Wait But Why's Life Calendar](https://waitbutwhy.com/2014/05/life-weeks.html) and [@luismbat's iOS implementation](https://x.com/luismbat), this Android app displays your life as a grid where:
-- **Filled circles** = Weeks you've already lived
-- **Empty circles** = Weeks remaining (based on life expectancy)
+<br>
 
-The wallpaper updates automatically every week, serving as a gentle reminder of life's finite nature.
+## The Philosophy
+
+Inspired by [The Life Calendar](https://thelifecalendar.com/), [Wait But Why's Life in Weeks](https://waitbutwhy.com/2014/05/life-weeks.html), and [@luismbat's concepts](https://x.com/luismbat). 
+
+Time is our most scarce resource, yet we rarely acknowledge it. Memento transforms your Android wallpaper into a continuous, minimalist visualization of your life in weeks:
+- **Filled dots** represent the weeks you've already lived.
+- **Empty dots** represent the remaining weeks based on your life expectancy.
+
+Every week, your wallpaper updates seamlessly in the background. It's a gentle, persistent reminder to make the upcoming week count.
 
 ## Features
 
-- 📅 **Simple Setup** - Just enter your birth date
-- 🖼️ **Auto-updating Wallpaper** - Refreshes weekly without any effort
-- 🌓 **Dark & Light Themes** - Match your style
-- 📱 **Home, Lock, or Both** - Choose where to display
-- 🔋 **Battery Efficient** - Uses WorkManager for optimized scheduling
-- 🔓 **Open Source** - Fully transparent, no tracking
-
-## Screenshots
-
-*Screenshots will be added after the first build. Build the app and run it on a device to capture screenshots.*
-
-<!-- Uncomment when screenshots are available:
-| Onboarding | Home | Settings |
-|------------|------|----------|
-| ![Onboarding](docs/onboarding.png) | ![Home](docs/home.png) | ![Settings](docs/settings.png) |
--->
+- 📅 **Visualize Your Journey** — See your entire life map at a glance.
+- 🎨 **Premium Aesthetic** — Minimalist, high-fidelity dot-matrix rendering.
+- 🔋 **Zero Distraction, Zero Drain** — Updates automatically once a week using efficient Android `WorkManager` APIs.
+- ✨ **Customizable Design** — Toggle between Dark and Light themes. Choose from custom dot aesthetics like *Circle*, *Ring*, *Square*, or *Diamond*.
 
 ## Installation
 
-### From Releases (Recommended)
+### Get the App (Recommended)
 
-1. Download the latest APK from [Releases](https://github.com/dharmveerjakhar/memento/releases)
-2. Install on your Android device (enable "Install from Unknown Sources" if needed)
-3. Open the app and enter your birth date
+1. Download the latest APK from the [Releases](https://github.com/dharmveerjakhar/memento/releases) page.
+2. Transfer it to your Android device and install (ensure "Install from Unknown Sources" is enabled in your security settings).
+3. Open the app, set your birth date and life expectancy, and tap **"Set As Wallpaper"**.
 
 ### Build from Source
 
@@ -44,8 +43,6 @@ The wallpaper updates automatically every week, serving as a gentle reminder of 
 - Android Studio Hedgehog (2023.1.1) or newer
 - JDK 17
 - Android SDK 35
-
-**Steps:**
 
 ```bash
 # Clone the repository
@@ -59,67 +56,15 @@ cd memento
 ./gradlew installDebug
 ```
 
-The APK will be at `app/build/outputs/apk/debug/app-debug.apk`
+## How It Works Under the Hood
+1. **Data State**: Open the beautifully crafted Compose UI to input your birth date and timeline.
+2. **Generation**: A highly optimized `CalendarImageGenerator` draws your entire life grid using the native `Canvas` API directly to a bitmap, perfectly scaled for your screen's aspect ratio.
+3. **Wallpaper Engine**: Instantly binds the final bitmap to your system's Home, Lock, or Dual screens without incurring continuous battery drain.
+4. **Auto-update Worker**: A scheduled Android `PeriodicWorkRequest` automatically runs completely silently every 7 days to repaint your life journey exactly at the turn of your new week.
 
-## How It Works
+## License & Acknowledgments
 
-1. **Onboarding**: You enter your birth date and life expectancy
-2. **Generation**: The app calculates weeks lived and generates a grid image
-3. **Wallpaper**: The image is set as your wallpaper (home, lock, or both)
-4. **Auto-update**: WorkManager schedules a weekly job to regenerate and update
+This project is fully open source and licensed under the MIT License - see [LICENSE](LICENSE) for details.
 
-### Technical Details
-
-- **Language**: Kotlin
-- **UI**: Jetpack Compose + Material 3
-- **Background**: WorkManager with PeriodicWorkRequest (7-day interval)
-- **Storage**: DataStore Preferences
-- **Image Generation**: Android Canvas API
-- **Wallpaper**: WallpaperManager (no special permissions needed)
-
-## Project Structure
-
-```
-app/src/main/java/com/example/lifecalendar/
-├── LifeCalendarApp.kt           # Application class
-├── MainActivity.kt              # Entry point + Navigation
-├── data/
-│   └── PreferencesRepository.kt # DataStore wrapper
-├── domain/
-│   └── LifeCalendarCalculator.kt # Week calculations
-├── generator/
-│   └── CalendarImageGenerator.kt # Canvas-based image generation
-├── wallpaper/
-│   └── WallpaperUpdater.kt      # WallpaperManager wrapper
-├── worker/
-│   └── WallpaperUpdateWorker.kt # Weekly background job
-└── ui/
-    ├── MainViewModel.kt         # State management
-    ├── navigation/
-    │   └── Screen.kt            # Navigation routes
-    ├── screens/
-    │   ├── OnboardingScreen.kt  # Birth date entry
-    │   ├── HomeScreen.kt        # Preview + actions
-    │   └── SettingsScreen.kt    # Preferences
-    └── theme/
-        ├── Color.kt
-        ├── Theme.kt
-        └── Type.kt
-```
-
-## Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-## License
-
-This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.
-
-## Acknowledgments
-
-- [Wait But Why](https://waitbutwhy.com/) for the original Life Calendar concept
-- [@luismbat](https://x.com/luismbat) for the iOS Shortcut inspiration
-
----
-
-**Remember**: Each filled circle represents a week you've experienced. Make the remaining ones count. ⬤
+- Designed initially from the [Wait But Why](https://waitbutwhy.com/) philosophy.
+- Premium UI/UX inspirations curated from [The Life Calendar](https://thelifecalendar.com/).
